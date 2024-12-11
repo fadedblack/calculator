@@ -1,113 +1,137 @@
-function calculator(input) {
-  return 1;
+const add = function (number1, number2) {
+  return number1 + number2;
+};
+
+const sub = function (number1, number2) {
+  return number1 - number2;
+};
+
+const multiply = function (number1, number2) {
+  return number1 * number2;
+};
+
+function calculate(operation, number1, number2) {
+  return operation(number1, number2);
 }
 
-//************************************TABLE*************************************
-const DASH = '━';
-const BAR = '┃';
-const SPACE = ' ';
+console.log(calculate(add, 1, 2));
+console.log(calculate(add, 5, 4));
 
-function isEven(number) {
-  return (number & 1) === 0;
-}
+console.log(calculate(sub, 5, 4));
+console.log(calculate(sub, 1, 3));
 
-function insertData(message, size) {
-  const totalSpaces = size - message.toString().length;
-  const padding = isEven(size) ? 0 : 1;
+console.log(calculate(multiply, 1, 3));
+console.log(calculate(multiply, 4, 7));
 
-  const timesLeft = Math.floor(totalSpaces / 2);
-  const timesRight = Math.ceil(totalSpaces / 2) + padding;
+// //************************************TABLE*************************************
+// const DASH = '━';
+// const BAR = '┃';
+// const SPACE = ' ';
 
-  return BAR + SPACE.repeat(timesLeft) + message + SPACE.repeat(timesRight);
-}
+// function isEven(number) {
+//   return (number & 1) === 0;
+// }
 
-function insertAllData(values, size) {
-  let table = [];
+// function insertData(message, size) {
+//   const totalSpaces = size - message.toString().length;
+//   const padding = isEven(size) ? 0 : 1;
 
-  for (const row of values) {
-    for (const column of row) {
-      table.push(insertData(column, size));
-    }
+//   const timesLeft = Math.floor(totalSpaces / 2);
+//   const timesRight = Math.ceil(totalSpaces / 2) + padding;
 
-    table.push('┃\n' + getBorder('┣', '╋', '┫', row.length, size) + '\n');
-  }
+//   return BAR + SPACE.repeat(timesLeft) + message + SPACE.repeat(timesRight);
+// }
 
-  table.pop();
-  return table.join("");
-}
+// function insertAllData(values, size) {
+//   let table = [];
 
-function getBorder(start, middle, end, columns, length) {
-  const times = Math.ceil(length / 2);
-  const column = DASH.repeat(times) + middle + DASH.repeat(times);
+//   for (const row of values) {
+//     for (const column of row) {
+//       table.push(insertData(column, size));
+//       // table.push(insertData(column, 10)); // modifying for this case
+//     }
 
-  const startingSegment = start + DASH.repeat(times);
-  const endingSegment = DASH.repeat(times) + end;
+//     table.push('┃\n' + getBorder('┣', '╋', '┫', row.length, size) + '\n');
+//   }
 
-  return startingSegment + column.repeat(columns - 1) + endingSegment;
-}
+//   table.pop();
+//   return table.join("");
+// }
 
-function getLargestSize(values) {
-  let longestString = '';
+// function getBorder(start, middle, end, columns, length) {
+//   const times = Math.ceil(length / 2);
+//   const column = DASH.repeat(times) + middle + DASH.repeat(times);
 
-  for (const rows of values) {
-    for (const string of rows) {
-      if (string.toString().length > longestString.length) {
-        longestString = string;
-      }
-    }
-  }
+//   const startingSegment = start + DASH.repeat(times);
+//   const endingSegment = DASH.repeat(times) + end;
 
-  return longestString.length;
-}
+//   return startingSegment + column.repeat(columns - 1) + endingSegment;
+// }
 
-function createTable(values) {
-  const size = getLargestSize(values);
+// function getLargestSize(values) {
+//   let longestString = '';
 
-  const table = getBorder('┏', '┳', '┓', values[0].length, size) + '\n';
-  const bottom = '┃\n' + getBorder('┗', '┻', '┛', values[0].length, size);
+//   for (const rows of values) {
+//     for (const string of rows) {
+//       if (string.toString().length > longestString.length) {
+//         longestString = string;
+//       }
+//     }
+//   }
 
-  return table + insertAllData(values, size) + bottom;
-}
+//   return longestString.length;
+// }
 
-//***********************************TESTING***********************************
+// function createTable(values) {
+//   const size = getLargestSize(values);
 
-function display(table) {
-  console.log(table);
-}
+//   const table = getBorder('┏', '┳', '┓', values[0].length, size) + '\n';
+//   const bottom = '┃\n' + getBorder('┗', '┻', '┛', values[0].length, size);
 
-function getMark(acutal, expected) {
-  return acutal === expected ? '🟢' : '🔴';
-}
+//   return table + insertAllData(values, size) + bottom;
+// }
 
-function test(input, expected, tableData) {
-  const acutal = calculator(input);
-  const mark = getMark(acutal, expected);
+// //***********************************TESTING***********************************
 
-  const testData = [mark, input, expected, acutal];
+// function display(table) {
+//   console.log(table);
+// }
 
-  tableData.push(testData);
-}
+// function getMark(acutal, expected) {
+//   return acutal === expected ? '🟢' : '🔴';
+// }
 
-function getHeading() {
-  const heading = [
-    "Status", "Input",
-    "Expected Output", "Actual Output"
-  ];
+// function test(operation, number1, number2, expected, tableData) {
+//   const acutal = calculator(operation, number1, number2);
+//   const mark = getMark(acutal, expected);
 
-  return heading;
-}
+//   const testData = [mark, operation, number1, number2, expected, acutal];
 
-function printTable(tableData) {
-  display(createTable(tableData));
-}
+//   tableData.push(testData);
+// }
 
-function testAll() {
-  display("\nTesting Calculator Function:\n");
+// function getHeading() {
+//   const heading = [
+//     "Status", "Operation", "Number1", "Number2",
+//     "Expected Output", "Actual Output"
+//   ];
 
-  const tableData = [getHeading()];
-  test('input', 1, tableData);
+//   return heading;
+// }
 
-  printTable(tableData);
-}
+// function printTable(tableData) {
+//   display(createTable(tableData));
+// }
 
-testAll();
+// function testAll() {
+//   display("\nTesting Calculator Function:\n");
+
+//   const tableData = [getHeading()];
+
+//   test(add, 1, 2, 3, tableData);
+//   test(add, 5, 4, 9, tableData);
+
+//   printTable(tableData);
+// }
+
+// testAll();
