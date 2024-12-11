@@ -1,3 +1,7 @@
+function sum(x, y) {
+  return x + y;
+}
+
 const add = function (number1, number2) {
   return number1 + number2;
 };
@@ -10,128 +14,144 @@ const multiply = function (number1, number2) {
   return number1 * number2;
 };
 
-function calculate(operation, number1, number2) {
+const calculate = function (operation, number1, number2) {
   return operation(number1, number2);
+};
+
+const userInput = function () {
+  const symbols = [sum, add, sub, multiply];
+
+  const operation = +prompt("Enter operation: ", 0);
+  const number1 = +prompt("Enter number: ", 0);
+  const number2 = +prompt("Enter number: ", 0);
+
+  console.logcalculate(symbols[operation % 4], number1, number2);
+};
+
+userInput();
+
+const noReturn = function (x, y) {
+  console.log('hello');
+  console.log(x + y);
+};
+
+// console.log(calculate(add, 1, 2));
+// console.log(calculate(add, 5, 4));
+
+// console.log(calculate(sub, 5, 4));
+// console.log(calculate(sub, 1, 3));
+
+// console.log(calculate(multiply, 1, 3));
+// console.log(calculate(multiply, 4, 7));
+
+//************************************TABLE*************************************
+const DASH = '━';
+const BAR = '┃';
+const SPACE = ' ';
+
+function isEven(number) {
+  return (number & 1) === 0;
 }
 
-console.log(calculate(add, 1, 2));
-console.log(calculate(add, 5, 4));
+function insertData(message, size) {
+  const totalSpaces = size - message.toString().length;
+  const padding = isEven(size) ? 0 : 1;
 
-console.log(calculate(sub, 5, 4));
-console.log(calculate(sub, 1, 3));
+  const timesLeft = Math.floor(totalSpaces / 2);
+  const timesRight = Math.ceil(totalSpaces / 2) + padding;
 
-console.log(calculate(multiply, 1, 3));
-console.log(calculate(multiply, 4, 7));
+  return BAR + SPACE.repeat(timesLeft) + message + SPACE.repeat(timesRight);
+}
 
-// //************************************TABLE*************************************
-// const DASH = '━';
-// const BAR = '┃';
-// const SPACE = ' ';
+function insertAllData(values, size) {
+  let table = [];
 
-// function isEven(number) {
-//   return (number & 1) === 0;
-// }
+  for (const row of values) {
+    for (const column of row) {
+      table.push(insertData(column, size));
+    }
 
-// function insertData(message, size) {
-//   const totalSpaces = size - message.toString().length;
-//   const padding = isEven(size) ? 0 : 1;
+    table.push('┃\n' + getBorder('┣', '╋', '┫', row.length, size) + '\n');
+  }
 
-//   const timesLeft = Math.floor(totalSpaces / 2);
-//   const timesRight = Math.ceil(totalSpaces / 2) + padding;
+  table.pop();
+  return table.join("");
+}
 
-//   return BAR + SPACE.repeat(timesLeft) + message + SPACE.repeat(timesRight);
-// }
+function getBorder(start, middle, end, columns, length) {
+  const times = Math.ceil(length / 2);
+  const column = DASH.repeat(times) + middle + DASH.repeat(times);
 
-// function insertAllData(values, size) {
-//   let table = [];
+  const startingSegment = start + DASH.repeat(times);
+  const endingSegment = DASH.repeat(times) + end;
 
-//   for (const row of values) {
-//     for (const column of row) {
-//       table.push(insertData(column, size));
-//       // table.push(insertData(column, 10)); // modifying for this case
-//     }
+  return startingSegment + column.repeat(columns - 1) + endingSegment;
+}
 
-//     table.push('┃\n' + getBorder('┣', '╋', '┫', row.length, size) + '\n');
-//   }
+function getLargestSize(values) {
+  let longestString = '';
 
-//   table.pop();
-//   return table.join("");
-// }
+  for (const rows of values) {
+    for (const string of rows) {
+      if (string.toString().length > longestString.length) {
+        longestString = string.toString();
+      }
+    }
+  }
 
-// function getBorder(start, middle, end, columns, length) {
-//   const times = Math.ceil(length / 2);
-//   const column = DASH.repeat(times) + middle + DASH.repeat(times);
+  return longestString.length;
+}
 
-//   const startingSegment = start + DASH.repeat(times);
-//   const endingSegment = DASH.repeat(times) + end;
+function createTable(values) {
+  const size = getLargestSize(values);
 
-//   return startingSegment + column.repeat(columns - 1) + endingSegment;
-// }
+  const table = getBorder('┏', '┳', '┓', values[0].length, size) + '\n';
+  const bottom = '┃\n' + getBorder('┗', '┻', '┛', values[0].length, size);
 
-// function getLargestSize(values) {
-//   let longestString = '';
+  return table + insertAllData(values, size) + bottom;
+}
 
-//   for (const rows of values) {
-//     for (const string of rows) {
-//       if (string.toString().length > longestString.length) {
-//         longestString = string;
-//       }
-//     }
-//   }
+//***********************************TESTING***********************************
 
-//   return longestString.length;
-// }
+function display(table) {
+  console.log(table);
+}
 
-// function createTable(values) {
-//   const size = getLargestSize(values);
+function getMark(acutal, expected) {
+  return acutal === expected ? '🟢' : '🔴';
+}
 
-//   const table = getBorder('┏', '┳', '┓', values[0].length, size) + '\n';
-//   const bottom = '┃\n' + getBorder('┗', '┻', '┛', values[0].length, size);
+function test(operation, number1, number2, expected, tableData) {
+  const acutal = calculate(operation, number1, number2);
+  const mark = getMark(acutal, expected);
 
-//   return table + insertAllData(values, size) + bottom;
-// }
+  const testData = [mark, operation, number1, number2, expected, acutal];
 
-// //***********************************TESTING***********************************
+  tableData.push(testData);
+}
 
-// function display(table) {
-//   console.log(table);
-// }
+function getHeading() {
+  const heading = [
+    "Status", "Operation", "Number1", "Number2",
+    "Expected Output", "Actual Output"
+  ];
 
-// function getMark(acutal, expected) {
-//   return acutal === expected ? '🟢' : '🔴';
-// }
+  return heading;
+}
 
-// function test(operation, number1, number2, expected, tableData) {
-//   const acutal = calculator(operation, number1, number2);
-//   const mark = getMark(acutal, expected);
+function printTable(tableData) {
+  display(createTable(tableData));
+}
 
-//   const testData = [mark, operation, number1, number2, expected, acutal];
+function testAll() {
+  display("\nTesting Calculator Function:\n");
 
-//   tableData.push(testData);
-// }
+  const tableData = [getHeading()];
 
-// function getHeading() {
-//   const heading = [
-//     "Status", "Operation", "Number1", "Number2",
-//     "Expected Output", "Actual Output"
-//   ];
+  test(add, 1, 2, 3, tableData);
+  // test(add, 5, 4, 9, tableData);
 
-//   return heading;
-// }
-
-// function printTable(tableData) {
-//   display(createTable(tableData));
-// }
-
-// function testAll() {
-//   display("\nTesting Calculator Function:\n");
-
-//   const tableData = [getHeading()];
-
-//   test(add, 1, 2, 3, tableData);
-//   test(add, 5, 4, 9, tableData);
-
-//   printTable(tableData);
-// }
+  printTable(tableData);
+}
 
 // testAll();
